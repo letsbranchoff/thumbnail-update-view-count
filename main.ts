@@ -39,7 +39,7 @@ function main() {
   }
 
   const svgAsDom = parseSvgStrToXml(svg);
-  updateNumberInThumbnail(svgAsDom, "2000");
+  updateNumberInThumbnail(svgAsDom, "1,000,000");
 
   saveJsdomAsPNG(svgAsDom);
 }
