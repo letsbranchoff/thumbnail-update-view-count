@@ -1,4 +1,8 @@
 import fs from "node:fs";
+import jsdom from "jsdom";
+import sharp from "sharp";
+
+const { JSDOM } = jsdom;
 
 function openSvg(path = "./assets/thumbnail-template.svg"): string {
   try {
@@ -9,6 +13,24 @@ function openSvg(path = "./assets/thumbnail-template.svg"): string {
   }
 }
 
+function parseSvgStrToXml(svg_str: string) {
+  return new JSDOM(svg_str);
+}
+
+function updateNumberInThumbnail(dom: jsdom.JSDOM, val: string) {
+  dom.window.document.getElementById("viewCount").innerHTML = val;
+}
+
+function saveJsdomAsPNG(dom: jsdom.JSDOM, dir = "./output") {
+  let svgString = dom.window.document.getElementsByTagName("body")[0].innerHTML;
+
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir);
+  }
+
+  sharp(Buffer.from(svgString)).png().toFile(`${dir}/thumbnail.png`);
+}
+
 function main() {
   const svg = openSvg();
 
@@ -16,7 +38,10 @@ function main() {
     return;
   }
 
-  console.log(svg);
+  const svgAsDom = parseSvgStrToXml(svg);
+  updateNumberInThumbnail(svgAsDom, "2000");
+
+  saveJsdomAsPNG(svgAsDom);
 }
 
 if (typeof require !== "undefined" && require.main === module) {
