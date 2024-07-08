@@ -10,6 +10,7 @@
   "description": "Updates YouTube video thumbnail with view count.",
   "devDependencies": {
     "@types/node": "^20.14.10",
+    "ts-node": "^10.9.2",
     "typescript": "^5.5.3"
   }
 }
