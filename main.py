@@ -4,7 +4,7 @@ from xml.dom import minidom
 
 
 def open_svg(
-    path: str = os.path.join("assets", "update-image-test-python.svg")
+    path: str = os.path.join("assets", "thumbnail-template.svg")
 ) -> minidom.Document | None:
     try:
         return minidom.parse(path)
@@ -29,7 +29,7 @@ def main():
         print("Failed to load SVG image...")
         return
 
-    update_text_in_svg(svg=svg, value="Test")
+    update_text_in_svg(svg=svg, value="100000 🤩")
 
     save_svg(svg=svg)
 
