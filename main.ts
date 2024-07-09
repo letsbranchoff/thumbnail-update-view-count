@@ -17,8 +17,9 @@ function parseSvgStrToXml(svg_str: string) {
   return new JSDOM(svg_str);
 }
 
-function updateNumberInThumbnail(dom: jsdom.JSDOM, val: string) {
-  dom.window.document.getElementById("viewCount").innerHTML = val;
+function updateNumberInThumbnail(dom: jsdom.JSDOM, val: number) {
+  dom.window.document.getElementById("viewCount").innerHTML =
+    val.toLocaleString();
 }
 
 function saveJsdomAsPNG(dom: jsdom.JSDOM, dir = "./output") {
@@ -39,7 +40,7 @@ function main() {
   }
 
   const svgAsDom = parseSvgStrToXml(svg);
-  updateNumberInThumbnail(svgAsDom, "1,000,000");
+  updateNumberInThumbnail(svgAsDom, 2816);
 
   saveJsdomAsPNG(svgAsDom);
 }
