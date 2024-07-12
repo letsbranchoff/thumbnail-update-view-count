@@ -48,6 +48,21 @@ Once you've made your credentials and have the client details you can generate t
 1. Navigate to [https://developers.google.com/oauthplayground](https://developers.google.com/oauthplayground).
 2. In the top-right click the cog.
 3. Check `Use your own OAuth credentials`.
-   - <img width="478" alt="Screenshot 2024-07-12 at 08 28 44" src="https://github.com/user-attachments/assets/b23128de-2813-46d6-a314-e83027462d7d">
+   - <img width="250" alt="Screenshot 2024-07-12 at 08 28 44" src="https://github.com/user-attachments/assets/b23128de-2813-46d6-a314-e83027462d7d">
 4. Paste your client details and `Close` the menu.
-5. On the left-hand side
+5. On the left-hand side under `Step 1` select `YouTube Data API v3 v3 > https://www.googleapis.com/auth/youtube > Authorize APIs`.
+  - <img width="250" alt="Screenshot 2024-07-12 at 20 11 22" src="https://github.com/user-attachments/assets/48f73c18-bc21-4346-ad1e-ece7cf12e18c">
+6. For `Step 2` click the `Exchange authorization code for tokens` and copy the generated Refresh Token.
+   - <img width="250" alt="Screenshot 2024-07-12 at 20 15 08" src="https://github.com/user-attachments/assets/ad43e34c-6ff6-4689-8fc9-a11b335b7b26">
+
+## Running the Tool
+
+When executed the tool used the following environment variables, make sure these are configured:
+
+- `VIDEO_ID` - you'll need to upload your video before you are able to get this.
+    - <img width="250" alt="Screenshot 2024-07-12 at 20 20 39" src="https://github.com/user-attachments/assets/15302430-21ea-4cca-9c90-11ec00c4bb5d">
+- `CLIENT_ID` - from OAuth client ID page.
+- `CLIENT_SECRET` - from OAuth client ID page.
+- `REFRESH_TOKEN` - from oauthplayground.
+
+Now you're ready to run the tool!
