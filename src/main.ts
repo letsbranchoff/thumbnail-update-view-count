@@ -1,9 +1,9 @@
 import {
   openSvg,
   parseSvgStrToXml,
-  saveJsdomAsPNG,
   updateNumberInTemplate,
-} from "./modules/image_handling.ts";
+  saveJsdomAsPNG,
+} from "./functions/image_handling";
 import {
   getGoogleOAuthClient,
   getYoutubeClient,
@@ -11,9 +11,9 @@ import {
   parsePreviousViewsFromTitle,
   updateVideoTitle,
   updateVideoThumbnail,
-} from "./modules/youtube_handling.ts";
+} from "./functions/youtube_handling";
 
-function main() {
+module.exports = async function () {
   const { VIDEO_ID, CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN } = process.env;
   if (!VIDEO_ID || !CLIENT_ID || !CLIENT_SECRET || !REFRESH_TOKEN) {
     return;
@@ -45,8 +45,4 @@ function main() {
       }
     }
   );
-}
-
-if (typeof require !== "undefined" && require.main === module) {
-  main();
-}
+};

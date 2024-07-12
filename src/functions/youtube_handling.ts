@@ -58,7 +58,7 @@ function updateVideoTitle(
 function updateVideoThumbnail(client: youtube_v3.Youtube, videoId: string) {
   const media = {
     mimeType: "image/png",
-    body: fs.readFileSync("./output/thumbnail.png"),
+    body: fs.readFileSync("../output/thumbnail.png"),
   };
 
   client.thumbnails.set({

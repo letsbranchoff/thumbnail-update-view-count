@@ -4,7 +4,7 @@ import fs from "node:fs";
 
 const { JSDOM } = jsdom;
 
-function openSvg(path = "./assets/thumbnail-template.svg"): string {
+function openSvg(path = "../assets/thumbnail-template.svg"): string {
   try {
     return fs.readFileSync((path = path), "utf8");
   } catch (err) {
@@ -22,7 +22,7 @@ function updateNumberInTemplate(dom: jsdom.JSDOM, val: number) {
     val.toLocaleString();
 }
 
-async function saveJsdomAsPNG(dom: jsdom.JSDOM, dir = "./output") {
+async function saveJsdomAsPNG(dom: jsdom.JSDOM, dir = "../output") {
   let svgString = dom.window.document.getElementsByTagName("body")[0].innerHTML;
 
   if (!fs.existsSync(dir)) {
