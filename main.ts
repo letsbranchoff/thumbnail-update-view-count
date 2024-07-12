@@ -23,14 +23,14 @@ function updateNumberInThumbnail(dom: jsdom.JSDOM, val: number) {
     val.toLocaleString();
 }
 
-function saveJsdomAsPNG(dom: jsdom.JSDOM, dir = "./output") {
+async function saveJsdomAsPNG(dom: jsdom.JSDOM, dir = "./output") {
   let svgString = dom.window.document.getElementsByTagName("body")[0].innerHTML;
 
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir);
   }
 
-  sharp(Buffer.from(svgString)).png().toFile(`${dir}/thumbnail.png`);
+  await sharp(Buffer.from(svgString)).png().toFile(`${dir}/thumbnail.png`);
 }
 
 function getGoogleOAuthClient(
@@ -118,17 +118,19 @@ function main() {
   );
   const youtubeClient = getYoutubeClient(oauth2Client);
 
-  fetchVideoDetails(youtubeClient, VIDEO_ID).then(({ viewCount, title }) => {
-    const previousViewCount = parsePreviousViewsFromTitle(title);
-    if (previousViewCount !== viewCount) {
-      updateVideoTitle(youtubeClient, VIDEO_ID, viewCount);
+  fetchVideoDetails(youtubeClient, VIDEO_ID).then(
+    async ({ viewCount, title }) => {
+      const previousViewCount = parsePreviousViewsFromTitle(title);
+      if (previousViewCount !== viewCount) {
+        updateVideoTitle(youtubeClient, VIDEO_ID, viewCount);
 
-      const svgAsDom = parseSvgStrToXml(svg);
-      updateNumberInThumbnail(svgAsDom, viewCount);
-      saveJsdomAsPNG(svgAsDom);
-      updateVideoThumbnail(youtubeClient, VIDEO_ID);
+        const svgAsDom = parseSvgStrToXml(svg);
+        updateNumberInThumbnail(svgAsDom, viewCount);
+        await saveJsdomAsPNG(svgAsDom);
+        updateVideoThumbnail(youtubeClient, VIDEO_ID);
+      }
     }
-  });
+  );
 }
 
 if (typeof require !== "undefined" && require.main === module) {
