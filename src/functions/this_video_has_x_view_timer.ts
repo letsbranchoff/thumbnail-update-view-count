@@ -5,11 +5,16 @@ export async function thisVideoHasXViewTimer(
   myTimer: Timer,
   context: InvocationContext
 ): Promise<void> {
-  context.log("Timer function processed request.");
-  consoleLog();
+  context.log("Executing...");
+  const { VIDEO_ID, CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN } = process.env;
+  if (!VIDEO_ID || !CLIENT_ID || !CLIENT_SECRET || !REFRESH_TOKEN) {
+    return;
+  }
+
+  console.log(VIDEO_ID, CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN);
 }
 
 app.timer("thisVideoHasXViewTimer", {
-  schedule: "0 */10 * * * *",
+  schedule: "*/10 * * * * *",
   handler: thisVideoHasXViewTimer,
 });

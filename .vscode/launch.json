@@ -7,7 +7,13 @@
       "request": "attach",
       "restart": true,
       "port": 9229,
-      "preLaunchTask": "func: host start"
+      "preLaunchTask": "func: host start",
+      "env": {
+        "VIDEO_ID": "test",
+        "CLIENT_ID": "client id",
+        "CLIENT_SECRET": "client secret",
+        "REFRESH_TOKEN": "refresh token"
+      }
     }
   ]
 }
