@@ -1,4 +1,8 @@
-import { readFileSync } from "fs";
+import { existsSync, mkdirSync, readFileSync } from "fs";
+import jsdom = require("jsdom");
+import sharp = require("sharp");
+
+const { JSDOM } = jsdom;
 
 function openSvg(path = "./assets/thumbnail-template.svg"): string {
   try {
@@ -9,4 +13,23 @@ function openSvg(path = "./assets/thumbnail-template.svg"): string {
   }
 }
 
-export { openSvg };
+function parseSvgStrToXml(svg_str: string) {
+  return new JSDOM(svg_str);
+}
+
+function updateNumberInTemplate(dom: jsdom.JSDOM, val: number) {
+  dom.window.document.getElementById("viewCount").innerHTML =
+    val.toLocaleString();
+}
+
+async function saveJsdomAsPNG(dom: jsdom.JSDOM, dir = "./output") {
+  let svgString = dom.window.document.getElementsByTagName("body")[0].innerHTML;
+
+  if (!existsSync(dir)) {
+    mkdirSync(dir);
+  }
+
+  await sharp(Buffer.from(svgString)).png().toFile(`${dir}/thumbnail.png`);
+}
+
+export { openSvg, parseSvgStrToXml, updateNumberInTemplate, saveJsdomAsPNG };
