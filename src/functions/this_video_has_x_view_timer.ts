@@ -6,15 +6,14 @@ export async function thisVideoHasXViewTimer(
   context: InvocationContext
 ): Promise<void> {
   context.log("Executing...");
-  console.log(openSvg().substring(0, 10) + "...");
-  console.log("ENV", process.env);
+  context.log(openSvg().substring(0, 10) + "...");
 
   const { VIDEO_ID, CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN } = process.env;
   if (!VIDEO_ID || !CLIENT_ID || !CLIENT_SECRET || !REFRESH_TOKEN) {
     return;
   }
 
-  console.log(VIDEO_ID, CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN);
+  context.log(VIDEO_ID, CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN);
 }
 
 app.timer("thisVideoHasXViewTimer", {
