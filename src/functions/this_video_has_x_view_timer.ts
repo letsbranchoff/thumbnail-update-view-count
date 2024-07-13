@@ -10,6 +10,6 @@ export async function thisVideoHasXViewTimer(
 }
 
 app.timer("thisVideoHasXViewTimer", {
-  schedule: "*/10 * * * * *",
+  schedule: "0 */10 * * * *",
   handler: thisVideoHasXViewTimer,
 });
