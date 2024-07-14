@@ -1,6 +1,6 @@
 <h1 align="center">Match View Count in Thumbnail</h1>
 
-This tool updates a videos thumbnail and title to match the view count of the video.
+This tool updates a videos thumbnail and title to match the view count of the video - it is built for Azure Function App on the Consumption plan.
 <img width="1099" alt="YouTube channel page showcasing Thumbnail and Title matching view count" src="https://github.com/user-attachments/assets/eb2dcce7-e8bd-46f7-a850-9982e4a32697">
 
 
@@ -12,6 +12,9 @@ You need the following:
 - An SVG template of your thumbnail.
 - Google OAuth2 refresh token.
 
+> [!NOTE]
+> This code is intended to run on Azure Function App, you'll need to figure out what to change to locally running, or other providers - main code lives in `./src/functions`.
+
 ## SVG Thumbnail Template
 
 For the thumbnail I recommend creating your entire thumbnail except for the counter text as save this as a `.png`. Afterwards using an SVG editing tool embed the PNG image and add your view counter text.
@@ -20,6 +23,12 @@ Once done you'll need to open the SVG template in a text editor, find your view 
 <img width="411" alt="Screenshot 2024-07-12 at 08 10 10" src="https://github.com/user-attachments/assets/8d10468b-aa1f-4e5f-9e1c-a920dbdb0014">
 
 🗂️ The final SVG image should be placed in the `assets` folder and named `thumbnail-template.svg`.
+
+### Custom Fonts
+
+If you use custom fonts, e.g., Open Sans, you'll need to add the font file to the `./fonts` directory and add the relevant config setup in `./fonts/fonts.conf`.
+
+Open Sans is available by default.
 
 ## Getting a Google OAuth2 Refresh Token
 
@@ -55,9 +64,19 @@ Once you've made your credentials and have the client details you can generate t
 6. For `Step 2` click the `Exchange authorization code for tokens` and copy the generated Refresh Token.
    - <img width="250" alt="Screenshot 2024-07-12 at 20 15 08" src="https://github.com/user-attachments/assets/ad43e34c-6ff6-4689-8fc9-a11b335b7b26">
 
-## Running the Tool
+## Deploying the Tool
 
-When executed the tool used the following environment variables, make sure these are configured:
+In your Azure Function App add the following Environment Variables:
+
+```
+FONTCONFIG_PATH=fonts
+NODE_OPTIONS=--max-old-space-size=4096
+
+VIDEO_ID=<video id>
+CLIENT_ID=<client id>
+CLIENT_SECRET=<client secret>
+REFRESH_TOKEN=<refresh token>
+```
 
 - `VIDEO_ID` - you'll need to upload your video before you are able to get this.
     - <img width="250" alt="Screenshot 2024-07-12 at 20 20 39" src="https://github.com/user-attachments/assets/15302430-21ea-4cca-9c90-11ec00c4bb5d">
@@ -65,4 +84,11 @@ When executed the tool used the following environment variables, make sure these
 - `CLIENT_SECRET` - from OAuth client ID page.
 - `REFRESH_TOKEN` - from oauthplayground.
 
-Now you're ready to run the tool!
+Run the deployment of the code to the function app, I recommend using the VS Code Azure plugins.
+
+## Running the Tool
+
+The Azure Function App automatically runs every 10 minutes on zero ending minutes, e.g. 00:10, 00:20, etc...
+
+> [!NOTE]
+> The YouTube API has rate limiting for the calls utilising `units`. This app minimizes this by only changing the thumbnail when views change.
