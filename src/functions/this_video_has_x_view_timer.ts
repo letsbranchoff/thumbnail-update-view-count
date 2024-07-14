@@ -2,16 +2,16 @@ import { app, InvocationContext, Timer } from "@azure/functions";
 import {
   openSvg,
   parseSvgStrToXml,
-  saveJsdomAsPNG,
   updateNumberInTemplate,
+  saveJsdomAsPNG,
 } from "./modules/image_handling";
 import {
   getGoogleOAuthClient,
   getYoutubeClient,
-  fetchVideoDetails,
-  parsePreviousViewsFromTitle,
   updateVideoTitle,
   updateVideoThumbnail,
+  parsePreviousViewsFromTitle,
+  fetchVideoDetails,
 } from "./modules/youtube_handling";
 
 export async function thisVideoHasXViewTimer(
@@ -28,6 +28,10 @@ export async function thisVideoHasXViewTimer(
     return;
   }
 
+  const svgAsDom = parseSvgStrToXml(svg);
+  updateNumberInTemplate(svgAsDom, 100);
+  await saveJsdomAsPNG(svgAsDom);
+
   const oauth2Client = getGoogleOAuthClient(
     CLIENT_ID,
     CLIENT_SECRET,
@@ -43,9 +47,9 @@ export async function thisVideoHasXViewTimer(
 
         const svgAsDom = parseSvgStrToXml(svg);
         updateNumberInTemplate(svgAsDom, viewCount);
-        await saveJsdomAsPNG(svgAsDom);
+        const thumbnail = await saveJsdomAsPNG(svgAsDom);
 
-        updateVideoThumbnail(youtubeClient, VIDEO_ID);
+        updateVideoThumbnail(youtubeClient, VIDEO_ID, thumbnail);
       }
     }
   );

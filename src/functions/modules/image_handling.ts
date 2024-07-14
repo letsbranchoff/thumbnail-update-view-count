@@ -1,6 +1,6 @@
-import { existsSync, mkdirSync, readFileSync } from "fs";
 import jsdom = require("jsdom");
-import sharp = require("sharp");
+import { readFileSync } from "node:fs";
+import puppeteer from "puppeteer";
 
 const { JSDOM } = jsdom;
 
@@ -8,7 +8,6 @@ function openSvg(path = "./assets/thumbnail-template.svg"): string {
   try {
     return readFileSync((path = path), "utf8");
   } catch (err) {
-    console.error(err);
     process.exitCode = 1;
   }
 }
@@ -22,14 +21,22 @@ function updateNumberInTemplate(dom: jsdom.JSDOM, val: number) {
     val.toLocaleString();
 }
 
-async function saveJsdomAsPNG(dom: jsdom.JSDOM, dir = "./output") {
+async function saveJsdomAsPNG(dom: jsdom.JSDOM) {
   let svgString = dom.window.document.getElementsByTagName("body")[0].innerHTML;
 
-  if (!existsSync(dir)) {
-    mkdirSync(dir);
-  }
+  const browser = await puppeteer.launch({
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  });
+  const page = await browser.newPage();
 
-  await sharp(Buffer.from(svgString)).png().toFile(`${dir}/thumbnail.png`);
+  await page.setViewport({ width: 1920, height: 1080 });
+  await page.setContent(svgString);
+
+  const svgInPage = await page.$("svg");
+  const thumbnailAsBuffer = await svgInPage.screenshot();
+  await browser.close();
+
+  return thumbnailAsBuffer;
 }
 
 export { openSvg, parseSvgStrToXml, updateNumberInTemplate, saveJsdomAsPNG };
