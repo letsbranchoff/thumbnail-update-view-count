@@ -1,4 +1,3 @@
-import fs from "node:fs";
 import { google, youtube_v3 } from "googleapis";
 
 function getGoogleOAuthClient(
@@ -55,10 +54,14 @@ function updateVideoTitle(
   });
 }
 
-function updateVideoThumbnail(client: youtube_v3.Youtube, videoId: string) {
+function updateVideoThumbnail(
+  client: youtube_v3.Youtube,
+  videoId: string,
+  thumbnail: Buffer
+) {
   const media = {
     mimeType: "image/png",
-    body: fs.readFileSync("./output/thumbnail.png"),
+    body: thumbnail,
   };
 
   client.thumbnails.set({
