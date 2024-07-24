@@ -101,3 +101,5 @@ __azurite_db*__.json
 # Output for PNG
 output
 chromium
+
+.DS_STORE
