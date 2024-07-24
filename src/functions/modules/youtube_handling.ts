@@ -28,6 +28,7 @@ async function fetchVideoDetails(client: youtube_v3.Youtube, videoId: string) {
   return {
     viewCount: parseInt(statistics.viewCount) ?? 0,
     title: snippet.title ?? "",
+    description: snippet.description
   };
 }
 
@@ -40,7 +41,8 @@ function parsePreviousViewsFromTitle(title: string) {
 function updateVideoTitle(
   client: youtube_v3.Youtube,
   videoId: string,
-  viewCount: number
+  viewCount: number,
+  description: string
 ) {
   client.videos.update({
     part: ["snippet"],
@@ -49,6 +51,7 @@ function updateVideoTitle(
       snippet: {
         title: `This video has ${viewCount} views.`,
         categoryId: "28",
+        description
       },
     },
   });

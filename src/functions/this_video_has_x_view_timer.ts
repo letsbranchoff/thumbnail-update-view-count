@@ -40,10 +40,10 @@ export async function thisVideoHasXViewTimer(
   const youtubeClient = getYoutubeClient(oauth2Client);
 
   fetchVideoDetails(youtubeClient, VIDEO_ID).then(
-    async ({ viewCount, title }) => {
+    async ({ viewCount, title, description }) => {
       const previousViewCount = parsePreviousViewsFromTitle(title);
       if (previousViewCount !== viewCount) {
-        updateVideoTitle(youtubeClient, VIDEO_ID, viewCount);
+        updateVideoTitle(youtubeClient, VIDEO_ID, viewCount, description);
 
         const svgAsDom = parseSvgStrToXml(svg);
         updateNumberInTemplate(svgAsDom, viewCount);
